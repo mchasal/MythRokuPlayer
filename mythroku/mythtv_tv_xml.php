@@ -73,6 +73,8 @@ while ($db_field = mysql_fetch_assoc($result)) {
 				<streamBitrate>" . $BitRate . "</streamBitrate>
 				<streamUrl>" . $WebServer . "/pl/stream/" . $db_field['chanid'] . "/" . convert_datetime($db_field['starttime']) . ".mp4</streamUrl>
 			</media>
+			<SDBifUrl>http://192.168.1.11/myth/" . RemoveExtension($db_field['basename'] ) . "-SD.bif</SDBifUrl>
+			<HDBifUrl>http://192.168.1.11/myth/" . RemoveExtension($db_field['basename'] ) . "-HD.bif</HDBifUrl>
 			<synopsis>" . htmlspecialchars(preg_replace('/[^(\x20-\x7F)]*/','', $db_field['description'] )) . "</synopsis>
 			<genres>" . $db_field['category'] . "</genres>
 			<subtitle>" . htmlspecialchars(preg_replace('/[^(\x20-\x7F)]*/','', $db_field['subtitle'] )) . "</subtitle>
