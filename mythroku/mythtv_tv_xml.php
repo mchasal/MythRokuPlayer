@@ -63,7 +63,7 @@ while ($db_field = mysql_fetch_assoc($result)) {
 		//print out all the records in xml format for roku to read 
 		print "	
 		<item sdImg=\"" . $WebServer . "/tv/get_pixmap/" . $db_field['hostname'] . "/" . $db_field['chanid'] ."/" . convert_datetime($db_field['starttime']) . "/100/75/-1/" . $db_field['basename'] .".100x75x-1.png\" hdImg=\"" . $WebServer . "/tv/get_pixmap/" . $db_field['hostname'] . "/" . $db_field['chanid'] . "/" . convert_datetime($db_field['starttime']) . "/100/75/-1/" . $db_field['basename'] . ".100x75x-1.png\">
-			<title>" . $db_field['title'] . "</title>
+			<title>" . htmlspecialchars(preg_replace('/[^(\x20-\x7F)]*/','', $db_field['title'] )) . "</title>
 			<contentId>" . $counter++ . "</contentId>
 			<contentType>TV</contentType>
 			<contentQuality>". $RokuDisplayType . "</contentQuality>
@@ -76,7 +76,7 @@ while ($db_field = mysql_fetch_assoc($result)) {
 			<SDBifUrl>http://192.168.1.11/myth/" . RemoveExtension($db_field['basename'] ) . "-SD.bif</SDBifUrl>
 			<HDBifUrl>http://192.168.1.11/myth/" . RemoveExtension($db_field['basename'] ) . "-HD.bif</HDBifUrl>
 			<synopsis>" . htmlspecialchars(preg_replace('/[^(\x20-\x7F)]*/','', $db_field['description'] )) . "</synopsis>
-			<genres>" . $db_field['category'] . "</genres>
+			<genres>" . htmlspecialchars(preg_replace('/[^(\x20-\x7F)]*/','', $db_field['category'] )) . "</genres>
 			<subtitle>" . htmlspecialchars(preg_replace('/[^(\x20-\x7F)]*/','', $db_field['subtitle'] )) . "</subtitle>
 			<runtime>" . $ShowLength . "</runtime>
 			<date>" . date("F j, Y, g:i a", convert_datetime($db_field['starttime'])) . "</date>
