@@ -10,18 +10,17 @@ $db_found = mysql_select_db($MythTVdb, $db_handle);
 //set the stream id to some abitary number 
 $counter = 1000;
 
-//define quiery for sorting the records, only get files that are .mp4
+//define query for sorting the records, only get files that are .mp4/.m4v
 if ($db_found) {
 
 	if (isset($_GET['sort']) && $_GET['sort'] == 'year') {
-		$SQL = "SELECT * FROM videometadata WHERE filename LIKE '%.mp4' ORDER BY year DESC ";
-	}elseif (isset($_GET['sort']) && $_GET['sort'] == 'title'){
-		$SQL = "SELECT * FROM videometadata WHERE filename LIKE '%.mp4' ORDER BY title ASC ";
-	}elseif (isset($_GET['sort']) && $_GET['sort'] == 'genre'){
-		$SQL = "SELECT * FROM videometadata WHERE filename LIKE '%.mp4' ORDER BY category ASC";
-	}
-	else {
-		$SQL = "SELECT * FROM videometadata WHERE filename LIKE '%.mp4' ";
+		$SQL = "SELECT * FROM videometadata WHERE filename LIKE '%.mp4' OR filename LIKE '%.m4v' ORDER BY year DESC ";
+	} elseif (isset($_GET['sort']) && $_GET['sort'] == 'title'){
+		$SQL = "SELECT * FROM videometadata WHERE filename LIKE '%.mp4' OR filename LIKE '%.m4v' ORDER BY title ASC ";
+	} elseif (isset($_GET['sort']) && $_GET['sort'] == 'genre'){
+		$SQL = "SELECT * FROM videometadata WHERE filename LIKE '%.mp4' OR filename LIKE '%.m4v' ORDER BY category ASC";
+	} else {
+		$SQL = "SELECT * FROM videometadata WHERE filename LIKE '%.mp4' OR filename LIKE '%.m4v'";
 	}
 
 //grab the data
