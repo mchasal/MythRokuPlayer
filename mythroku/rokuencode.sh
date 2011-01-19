@@ -11,8 +11,7 @@ DATABASEPASSWORD=password
 newbname=`echo $MPGFILE | sed 's/\(.*\)\..*/\1/'`
 newname="$MYTHDIR/$newbname.mp4"
 
-#/usr/bin/HandBrakeCLI -i $1/$2 -o $newname -e x264 -b 1500 -E faac -B 256 -R 48 -w 720
-/usr/bin/HandBrakeCLI -i $MYTHDIR/$MPGFILE -o $newname -e x264 -b 1500 -E faac -B 256 -R 48
+/usr/bin/HandBrakeCLI -i $MYTHDIR/$MPGFILE -o $newname -e x264 -r 29.97 -b 1500 -E faac -B 256 -R 48 --decomb
 
 #Mythtv seems to have problems with keyframes in mp4s, so make previews with ffmpeg
 ffmpeg -ss 34 -vframes 1 -i $newname -y -f image2  $MYTHDIR/$newbname.mp4.png
