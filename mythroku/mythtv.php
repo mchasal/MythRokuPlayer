@@ -11,7 +11,6 @@ print "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>
 	<category title=\"TV\" description=\"MythTV TV\" sd_img=\"" . $WebServer . "/" . $MythRokuDir . "/images/Mythtv_tv.png\" hd_img=\"" . $WebServer . "/" . $MythRokuDir . "/images/Mythtv_tv.png\">
 		<categoryLeaf title=\"All\" description=\"\" feed=\"" . $WebServer . "/" . $MythRokuDir . "/mythtv_tv_xml.php?sort=date\"/>";
 
-
 	// Get the recording groups (Should be optional?)
 	//make a connection to the mysql sever
 	$db_handle = mysql_connect($MysqlServer, $MythTVdbuser, $MythTVdbpass);
@@ -28,10 +27,8 @@ print "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>
 		while ($db_field = mysql_fetch_assoc($result)) {
 			print "<categoryLeaf title=\"" .  $db_field['recgroup'] . "\" description=\"\" feed=\"" . $WebServer . "/" . $MythRokuDir . "/mythtv_group_xml.php?group=". $db_field['recgroup'] ."\"/> ";
 		}
-	}
-
-	//throw error if can not connect to database
-	else {
+	} else {
+		//throw error if can not connect to database
 		print "Database NOT Found ";
 	}
 	//close mysql pointer
