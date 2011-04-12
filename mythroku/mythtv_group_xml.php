@@ -15,6 +15,8 @@ if ($db_found) {
 
 	if (isset($_GET['group'])) {
 		$SQL = "SELECT * FROM recorded WHERE recgroup='".$_GET['group']."' ORDER BY title,starttime ASC";
+	} elseif (isset($_GET['title'])) {
+		$SQL = "SELECT * FROM recorded WHERE title='".$_GET['title']."' ORDER BY starttime ASC";
 	}else {
 		$SQL = "SELECT * FROM recorded ORDER BY title,starttime ASC";
 	}

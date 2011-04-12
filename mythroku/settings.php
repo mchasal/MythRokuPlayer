@@ -8,6 +8,6 @@ $MysqlServer = "192.168.1.8";                          	//mysql server ip/name
 $MythTVdb = "mythtv";                                   //mythtv database name
 $MythTVdbuser = "mythtv";                               //mythtv database user
 $MythTVdbpass = "mythtv";                        	//mythtv database password
-
+$TVStyle = "default";                                     //Main TV page style: default, title, recgroup, ...
 
 ?>

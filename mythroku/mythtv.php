@@ -5,39 +5,55 @@ require_once './settings.php';
 print "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>
 <categories>
 
-	  <!-- banner_ad: optional element which displays an add at the top level category screen -->
-	  <banner_ad sd_img=\"" . $WebServer . "/" . $MythRokuDir . "/images/mythtv_logo_SD.png\" hd_img=\"" . $WebServer . "/" . $MythRokuDir . "/images/mythtv_logo_SD.png\"/>
+	<!-- banner_ad: optional element which displays an add at the top level category screen -->
+	<banner_ad sd_img=\"" . $WebServer . "/" . $MythRokuDir . "/images/mythtv_logo_SD.png\" hd_img=\"" . $WebServer . "/" . $MythRokuDir . "/images/mythtv_logo_SD.png\"/>
 
-	<category title=\"TV\" description=\"MythTV TV\" sd_img=\"" . $WebServer . "/" . $MythRokuDir . "/images/Mythtv_tv.png\" hd_img=\"" . $WebServer . "/" . $MythRokuDir . "/images/Mythtv_tv.png\">
-		<categoryLeaf title=\"All\" description=\"\" feed=\"" . $WebServer . "/" . $MythRokuDir . "/mythtv_tv_xml.php?sort=date\"/>";
+	<category title=\"TV\" description=\"MythTV TV\" sd_img=\"" . $WebServer . "/" . $MythRokuDir . "/images/Mythtv_tv.png\" hd_img=\"" . $WebServer . "/" . $MythRokuDir . "/images/Mythtv_tv.png\">\n";
 
-	// Get the recording groups (Should be optional?)
 	//make a connection to the mysql sever
 	$db_handle = mysql_connect($MysqlServer, $MythTVdbuser, $MythTVdbpass);
 	$db_found = mysql_select_db($MythTVdb, $db_handle);
-	//define quiery for sorting the records
 	if ($db_found) {
-		$SQL = "SELECT DISTINCT recgroup FROM recorded ORDER BY recgroup ASC";
-		//grab the data
-		$result = mysql_query($SQL);
-		$num_rows = mysql_num_rows($result);
-		//reset pointer
-		mysql_data_seek ( $result , 0 );
 
-		while ($db_field = mysql_fetch_assoc($result)) {
-			print "<categoryLeaf title=\"" .  $db_field['recgroup'] . "\" description=\"\" feed=\"" . $WebServer . "/" . $MythRokuDir . "/mythtv_group_xml.php?group=". $db_field['recgroup'] ."\"/> ";
+		if ($TVStyle == "title") {
+			//define quiery for sorting the records
+			$SQL = "SELECT DISTINCT title FROM recorded ORDER BY title ASC";
+			//grab the data
+			$result = mysql_query($SQL);
+			$num_rows = mysql_num_rows($result);
+			//reset pointer
+			mysql_data_seek ( $result , 0 );
+			while ($db_field = mysql_fetch_assoc($result)) {
+				$cleantitle = htmlspecialchars(preg_replace('/[^(\x20-\x7F)]*/','', $db_field['title'] ));
+				$qtitle = urlencode($db_field['title']);
+				print "          <categoryLeaf title=\"" .  $cleantitle . "\" description=\"\" feed=\"" . $WebServer . "/" . $MythRokuDir . "/mythtv_group_xml.php?title=". $qtitle ."\"/>\n";
+			}
+		} elseif ($TVStyle == "recgroup") {
+	                $SQL = "SELECT DISTINCT recgroup FROM recorded ORDER BY recgroup ASC";
+       	         	//grab the data
+                	$result = mysql_query($SQL);
+                	$num_rows = mysql_num_rows($result);
+                	//reset pointer
+                	mysql_data_seek ( $result , 0 );
+
+                	while ($db_field = mysql_fetch_assoc($result)) {
+                        	print "           <categoryLeaf title=\"" .  $db_field['recgroup'] . "\" description=\"\" feed=\"" . $WebServer . "/" . $MythRokuDir . "/mythtv_group_xml.php?group=". $db_field['recgroup'] ."\"/>\n";
+                	}
+		} else {
+			//Default case, just give some generic sorting
+			print "	<categoryLeaf title=\"Title\" description=\"\" feed=\"" . $WebServer . "/" . $MythRokuDir . "/mythtv_tv_xml.php?sort=title\"/> 
+				<categoryLeaf title=\"Genre\" description=\"\" feed=\"" . $WebServer . "/" . $MythRokuDir . "/mythtv_tv_xml.php?sort=genre\"/> 
+				<categoryLeaf title=\"Channel\" description=\"\" feed=\"" . $WebServer . "/" . $MythRokuDir . "/mythtv_tv_xml.php?sort=channel\"/>";
 		}
 	} else {
-		//throw error if can not connect to database
+		//throw error if cannot connect to database
 		print "Database NOT Found ";
 	}
 	//close mysql pointer
 	mysql_close($db_handle);
 
-	print "	<categoryLeaf title=\"Title\" description=\"\" feed=\"" . $WebServer . "/" . $MythRokuDir . "/mythtv_tv_xml.php?sort=title\"/> 
-		<categoryLeaf title=\"Genre\" description=\"\" feed=\"" . $WebServer . "/" . $MythRokuDir . "/mythtv_tv_xml.php?sort=genre\"/> 
-		<categoryLeaf title=\"Channel\" description=\"\" feed=\"" . $WebServer . "/" . $MythRokuDir . "/mythtv_tv_xml.php?sort=channel\"/> 
-	</category>
+
+	print "        </category>
 
 	<category title=\"Movies\" description=\"MythTV Movies\" sd_img=\"" . $WebServer . "/mythroku/images/Mythtv_movie.png\" hd_img=\"" . $WebServer . "/" . $MythRokuDir . "/images/Mythtv_movie.png\">
 		<categoryLeaf title=\"Title\" description=\"\" feed=\"" . $WebServer . "/mythroku/mythtv_movies_xml.php?sort=title\"/> 
