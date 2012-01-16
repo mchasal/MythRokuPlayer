@@ -37,14 +37,20 @@ mysql --user=$DATABASEUSER --password=$DATABASEPASSWORD mythconverg < /tmp/updat
 
 # Make the bif files for trick play
 cd $MYTHDIR
+# Should only need the HD or SD, not both.
 # If it's HD we assume it's 16:9
 date=`date`
 echo "$newbname:$date makebif HD" >> $LOGFILE
 /usr/local/bin/makebif.py -m 3 $newname >> $LOGFILE 2>&1
-# If it's SD we assume it's 4:3
-date=`date`
-echo "$newbname:$date makebif SD" >> $LOGFILE
-/usr/local/bin/makebif.py -m 0 $newname >> $LOGFILE 2>&1
+
+# If you also have a 4x3 set with a Roku, you'll need an
+# SD version of the .bif, however, it seems to be ok to 
+# just link to the HD version:
+ln -s $MYTHDIR/$newbname-HD.bif $MYTHDIR/$newbname-SD.bif
+# Or you can actually create it at the proper resolution
+#date=`date`
+#echo "$newbname:$date makebif SD" >> $LOGFILE
+#/usr/local/bin/makebif.py -m 0 $newname >> $LOGFILE 2>&1
 
 date=`date`
 echo "$newbname:$date Complete" >> $LOGFILE
